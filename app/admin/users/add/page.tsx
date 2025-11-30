@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
@@ -46,10 +45,7 @@ export default function AddUserPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-
-      <main className="flex-1 lg:ml-64">
+    <>
         {/* Header */}
         <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-6 py-4 lg:px-8">
@@ -87,7 +83,6 @@ export default function AddUserPage() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </>
   );
 }

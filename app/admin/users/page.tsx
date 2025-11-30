@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sidebar } from "@/components/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -134,25 +133,17 @@ export default function UsersPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-background">
-        <Sidebar />
-        <main className="flex-1 lg:ml-64">
           <div className="flex items-center justify-center h-screen">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
               <p className="text-muted-foreground">Loading users...</p>
             </div>
           </div>
-        </main>
-      </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      
-      <main className="flex-1 lg:ml-64">
+    <>
         {/* Header */}
         <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-6 py-4 lg:px-8">
@@ -340,7 +331,6 @@ export default function UsersPage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+    </>
   );
 }
