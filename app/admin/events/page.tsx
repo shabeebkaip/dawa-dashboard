@@ -207,101 +207,115 @@ export default function EventsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredEvents.map((event) => {
               const status = getEventStatus(event.eventStartDate, event.eventEndDate);
+              const eventDate = new Date(event.eventStartDate);
               return (
                 <Card
                   key={event._id}
-                  className="group shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border-0"
+                  className="group relative shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-100"
+                  onClick={() => window.location.href = `/admin/events/${event._id}`}
                 >
                   <CardContent className="p-0">
-                    {/* Event Image/Header */}
-                    <div className="relative h-48 bg-linear-to-br from-primary to-emerald-500 overflow-hidden">
+                    {/* Event Image/Header with Gradient Overlay */}
+                    <div className="relative h-56 overflow-hidden">
                       {event.oratorThumbnail ? (
-                        <Image
-                          src={event.oratorThumbnail}
-                          alt={event.eventName}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
+                        <>
+                          <Image
+                            src={event.oratorThumbnail}
+                            alt={event.eventName}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
+                        </>
                       ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <Calendar className="h-16 w-16 text-white/50" />
+                        <div className="absolute inset-0 bg-linear-to-br from-emerald-600 via-teal-600 to-cyan-600">
+                          <div className="flex items-center justify-center h-full">
+                            <Calendar className="h-20 w-20 text-white/30" />
+                          </div>
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                       
-                      {/* Status Badge */}
-                      <div className="absolute top-4 right-4">
-                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm ${status.color}`}>
+                      {/* Status Badge - Top Right */}
+                      <div className="absolute top-3 right-3 z-10">
+                        <Badge className={`${status.color} border-0 shadow-lg backdrop-blur-sm font-semibold`}>
                           {status.label === "Live" && (
-                            <span className="flex h-2 w-2">
+                            <span className="flex h-2 w-2 mr-1.5">
                               <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
                               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                             </span>
                           )}
                           {status.label}
-                        </span>
+                        </Badge>
                       </div>
 
-                      {/* Event Date */}
-                      <div className="absolute bottom-4 left-4">
-                        <div className="flex items-center gap-2 text-white">
-                          <div className="flex flex-col items-center bg-white/20 backdrop-blur-md rounded-lg px-3 py-2 border border-white/30">
-                            <span className="text-xs font-medium">
-                              {new Date(event.eventStartDate).toLocaleDateString("en-US", { month: "short" }).toUpperCase()}
-                            </span>
-                            <span className="text-2xl font-bold">
-                              {new Date(event.eventStartDate).getDate()}
-                            </span>
+                      {/* Event Date Box - Bottom Left */}
+                      <div className="absolute bottom-4 left-4 z-10">
+                        <div className="bg-white rounded-xl shadow-xl p-3 min-w-[70px] text-center">
+                          <div className="text-xs font-bold text-primary uppercase tracking-wider">
+                            {eventDate.toLocaleDateString("en-US", { month: "short" })}
+                          </div>
+                          <div className="text-3xl font-bold text-gray-900 leading-none mt-1">
+                            {eventDate.getDate()}
+                          </div>
+                          <div className="text-xs font-medium text-gray-500 mt-1">
+                            {eventDate.getFullYear()}
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Event Details */}
-                    <div className="p-6 space-y-4">
-                      <div>
-                        <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                          {event.eventName}
-                        </h3>
-                        
+                    {/* Event Details Section */}
+                    <div className="p-5 bg-white">
+                      {/* Event Title */}
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors leading-tight">
+                        {event.eventName}
+                      </h3>
+                      
+                      <div className="space-y-2.5 mb-4">
                         {/* Orator */}
                         {event.oratorName && (
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                            <User className="h-4 w-4 text-primary" />
-                            <span className="font-medium">{event.oratorName}</span>
+                          <div className="flex items-center gap-2.5 text-sm">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                              <User className="h-4 w-4 text-primary" />
+                            </div>
+                            <span className="font-semibold text-gray-700 truncate">{event.oratorName}</span>
                           </div>
                         )}
 
                         {/* Location */}
-                        <div className="flex items-start gap-2 text-sm text-muted-foreground mb-2">
-                          <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span className="line-clamp-2">{event.locationAddress}</span>
+                        <div className="flex items-start gap-2.5 text-sm">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-50 shrink-0 mt-0.5">
+                            <MapPin className="h-4 w-4 text-orange-600" />
+                          </div>
+                          <span className="text-gray-600 line-clamp-2 leading-relaxed">{event.locationAddress}</span>
                         </div>
 
                         {/* Time */}
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Clock className="h-4 w-4 text-primary" />
-                          <span>
+                        <div className="flex items-center gap-2.5 text-sm">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 shrink-0">
+                            <Clock className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <span className="font-medium text-gray-700">
                             {formatTime(event.eventStartDate)} - {formatTime(event.eventEndDate)}
                           </span>
                         </div>
                       </div>
 
-                      {/* Action Button */}
-                      <div className="pt-4 border-t border-border">
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-between 
-                          hover:bg-primary hover:text-white transition-colors"
-                          onClick={() => window.location.href = `/admin/events/${event._id}`}
-                        >
-                          <span>View Details</span>
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      {/* View Details Button */}
+                      <Button
+                        variant="outline"
+                        className="w-full mt-4 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 font-semibold"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.location.href = `/admin/events/${event._id}`;
+                        }}
+                      >
+                        <span>View Details</span>
+                        <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>

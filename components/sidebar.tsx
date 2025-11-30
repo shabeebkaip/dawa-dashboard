@@ -50,7 +50,6 @@ const navigationGroups: NavGroup[] = [
     items: [
       { title: "Users", href: "/admin/users", icon: Users },
       { title: "Events", href: "/admin/events", icon: Calendar },
-      { title: "Posts", href: "/admin/posts", icon: FileText },
     ],
   },
   {
@@ -64,7 +63,6 @@ const navigationGroups: NavGroup[] = [
           { title: "Sub Categories", href: "/admin/master/sub-categories", icon: Network },
           { title: "Subject Master", href: "/admin/master/subject-master", icon: BookOpen },
           { title: "Topic Master", href: "/admin/master/topic-master", icon: Lightbulb },
-          { title: "Common", href: "/admin/master/common", icon: Settings },
         ],
       },
     ],
