@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "@/hooks/useSession";
+import { api, parseResponse } from "@/lib/api";
 
 interface Event {
   _id: string;
@@ -26,7 +26,6 @@ interface Event {
 }
 
 export default function EventsPage() {
-  const { session } = useSession();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,13 +39,8 @@ export default function EventsPage() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const response = await fetch(`${baseUrl}/events?limit=10&page=${page}`, {
-        headers: {
-          Authorization: `Bearer ${session?.token}`,
-        },
-      });
-      const data = await response.json();
+      const response = await api.get(`/events?limit=10&page=${page}`);
+      const data = await parseResponse<Event[]>(response);
       setEvents(data);
     } catch (error) {
       console.error("Failed to fetch events:", error);

@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useSession } from "@/hooks/useSession";
+import { api, parseResponse } from "@/lib/api";
 
 interface Content {
   _id: string;
@@ -41,26 +41,19 @@ interface Post {
 }
 
 export default function PostsPage() {
-  const { session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const response = await fetch(`${baseUrl}/posts`, {
-        headers: {
-          Authorization: `Bearer ${session?.token}`,
-        },
-      });
-      const data = await response.json();
+      const response = await api.get("/posts");
+      const data = await parseResponse<Post[]>(response);
       setPosts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
