@@ -4,11 +4,11 @@ export const eventFormSchema = z.object({
   oratorId: z.string().min(1, "Please select a speaker"),
   eventName: z.string().min(3, "Event name must be at least 3 characters").max(200, "Event name is too long"),
   eventStartDate: z.date({
-    required_error: "Start date is required",
+    message: "Start date is required",
   }),
   eventStartTime: z.string().min(1, "Start time is required"),
   eventEndDate: z.date({
-    required_error: "End date is required",
+    message: "End date is required",
   }),
   eventEndTime: z.string().min(1, "End time is required"),
   locationAddress: z.string().min(5, "Location must be at least 5 characters").max(500, "Location is too long"),
