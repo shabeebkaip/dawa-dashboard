@@ -33,13 +33,12 @@ export default function EventsPage() {
 
   useEffect(() => {
     fetchEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/events?limit=10&page=${page}`);
+      const response = await api.get(`/events`);
       const data = await parseResponse<Event[]>(response);
       setEvents(data);
     } catch (error) {
